@@ -41,14 +41,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQUEST_CHOOSE_IMAGE) {
+        if(requestCode == REQUEST_CHOOSE_IMAGE && resultCode == RESULT_OK) {
             Uri uri =  data.getData();
             String path = ImageUtils.getRealPathFromUri(this, uri);
             photoPath.setVisibility(View.VISIBLE);
             photoPath.setText(path);
-            int requiredHight = photo.getHeight();
+            int requiredHeight = photo.getHeight();
             int requiredWidth = photo.getWidth();
-            Bitmap bm = ImageUtils.decodeSampledBitmapFromDisk(path, requiredWidth, requiredHight);
+            Bitmap bm = ImageUtils.decodeSampledBitmapFromDisk(path, requiredWidth, requiredHeight);
             photo.setImageBitmap(bm);
         }
         super.onActivityResult(requestCode, resultCode, data);
