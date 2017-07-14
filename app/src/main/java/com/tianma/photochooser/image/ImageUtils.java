@@ -1,6 +1,6 @@
 package com.tianma.photochooser.image;
 
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.res.Resources;
@@ -23,22 +23,14 @@ public class ImageUtils {
 
     /**
      * 将资源路径下的图片资源压缩后返回对应的Bitmap对象
-     *
-     * @param res
-     * @param resId
-     * @param requiredWidth
-     * @param requiredHeight
-     * @return
      */
-    public static Bitmap decodeSampledBitmapFromResource(Resources res,
-                                                         int resId, int requiredWidth, int requiredHeight) {
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int requiredWidth, int requiredHeight) {
         // 第一次解析将inJustDecodeBounds置为true用以获取图片大小
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(res, resId, options);
-        // 调用calcuteInSampleSize计算inSampleSize的值
-        options.inSampleSize = calculateInSampleSize(options, requiredWidth,
-                requiredHeight);
+        // 调用calculateInSampleSize计算inSampleSize的值
+        options.inSampleSize = calculateInSampleSize(options, requiredWidth, requiredHeight);
         // 将inJustDecodeBounds置为false,再次解析
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeResource(res, resId, options);
@@ -46,40 +38,28 @@ public class ImageUtils {
 
     /**
      * 将磁盘上的FileDescriptor代表的图片文件压缩后返回对应的Bitmap对象
-     *
-     * @param descriptor
-     * @param requiredWidth
-     * @param requiredHeight
-     * @return
      */
-    public static Bitmap decodeSampledBitmapFromDisk(FileDescriptor descriptor,
-                                                     int requiredWidth, int requiredHeight) {
+    public static Bitmap decodeSampledBitmapFromDisk(FileDescriptor descriptor, int requiredWidth, int requiredHeight) {
         // 第一次解析将inJustDecodeBounds置为true用以获取图片大小
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         Rect outPadding = new Rect(0, 0, requiredWidth, requiredHeight);
-        outPadding = null;
         BitmapFactory.decodeFileDescriptor(descriptor, outPadding, options);
-        // 调用calcuteInSampleSize计算inSampleSize的值
-        options.inSampleSize = calculateInSampleSize(options, requiredWidth,
-                requiredHeight);
+        // 调用calculateInSampleSize计算inSampleSize的值
+        options.inSampleSize = calculateInSampleSize(options, requiredWidth, requiredHeight);
         // 将inJustDecodeBounds置为false,再次解析
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFileDescriptor(descriptor, outPadding,
                 options);
     }
 
-    public static Bitmap decodeSampledBitmap(FileInputStream is,
-                                             int requiredWidth, int requiredHeight) {
+    public static Bitmap decodeSampledBitmap(FileInputStream is, int requiredWidth, int requiredHeight) {
         // 第一次解析将inJustDecodeBounds置为true用以获取图片大小
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        // Rect outPadding = new Rect(0, 0, requiredWidth, requiredHeight);
-        // outPadding = null;
         BitmapFactory.decodeStream(is, null, options);
-        // 调用calcuteInSampleSize计算inSampleSize的值
-        options.inSampleSize = calculateInSampleSize(options, requiredWidth,
-                requiredHeight);
+        // 调用calculateInSampleSize计算inSampleSize的值
+        options.inSampleSize = calculateInSampleSize(options, requiredWidth, requiredHeight);
         // 将inJustDecodeBounds置为false,再次解析
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeStream(is, null, options);
@@ -87,21 +67,14 @@ public class ImageUtils {
 
     /**
      * 将磁盘上的imagePath路径下的图片文件压缩后返回对应的Bitmap对象
-     *
-     * @param imagePath
-     * @param requiredWidth
-     * @param requiredHeight
-     * @return
      */
-    public static Bitmap decodeSampledBitmapFromDisk(String imagePath,
-                                                     int requiredWidth, int requiredHeight) {
+    public static Bitmap decodeSampledBitmapFromDisk(String imagePath, int requiredWidth, int requiredHeight) {
         // 第一次解析将inJustDecodeBounds置为true用以获取图片大小
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(imagePath, options);
-        // 调用calcuteInSampleSize计算inSampleSize的值
-        options.inSampleSize = calculateInSampleSize(options, requiredWidth,
-                requiredHeight);
+        // 调用calculateInSampleSize计算inSampleSize的值
+        options.inSampleSize = calculateInSampleSize(options, requiredWidth, requiredHeight);
         // 将inJustDecodeBounds置为false,再次解析
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(imagePath, options);
@@ -115,8 +88,7 @@ public class ImageUtils {
      * @param requiredHeight 需要的图片的高度
      * @return
      */
-    private static int calculateInSampleSize(BitmapFactory.Options options,
-                                             int requiredWidth, int requiredHeight) {
+    private static int calculateInSampleSize(BitmapFactory.Options options, int requiredWidth, int requiredHeight) {
         // 根据BitmapFactory.Options对象获取原图片的高度和宽度
         final int width = options.outWidth;
         final int height = options.outHeight;
@@ -133,113 +105,6 @@ public class ImageUtils {
         return inSampleSize;
     }
 
-//    /**
-//     * 根据图片的Uri获取图片的绝对路径(已经适配多种API)
-//     *
-//     * @param context
-//     *            上下文对象
-//     * @param uri
-//     *            图片的Uri
-//     * @return 如果Uri对应的图片存在,那么返回该图片的绝对路径,否则返回null
-//     */
-//    public static String getRealPathFromUri(Context context, Uri uri) {
-//        Log.d("Tianma", "Uri = " + uri);
-//        int sdkVersion = Build.VERSION.SDK_INT;
-//        if (sdkVersion < 11) {
-//            // SDK < Api11
-//            return getRealPathFromUri_BelowApi11(context, uri);
-//        }
-//        if (sdkVersion < 19) {
-//            // SDK >= 11 && SDK < 19
-//            return getRealPathFromUri_Api11To18(context, uri);
-//        }
-//        // SDK >= 19
-//        return getRealPathFromUri_AboveApi19(context, uri);
-//    }
-//
-//    /**
-//     * 适配api19以上,根据uri获取图片的绝对路径
-//     *
-//     * @param context
-//     *            上下文对象
-//     * @param uri
-//     *            图片的Uri
-//     * @return 如果Uri对应的图片存在,那么返回该图片的绝对路径,否则返回null
-//     */
-//    @SuppressLint("NewApi")
-//    private static String getRealPathFromUri_AboveApi19(Context context, Uri uri) {
-//        String filePath = null;
-//        String wholeID = DocumentsContract.getDocumentId(uri);
-//
-//        Log.d("Tianma", "wholeId = " + wholeID);
-//        // 使用':'分割
-//        String id = wholeID.split(":")[1];
-//
-//        String[] projection = { MediaStore.Images.Media.DATA };
-//        String selection = MediaStore.Images.Media._ID + "=?";
-//        String[] selectionArgs = { id };
-//
-//        Cursor cursor = context.getContentResolver().query(
-//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection,
-//                selection, selectionArgs, null);
-//        int columnIndex = cursor.getColumnIndex(projection[0]);
-//
-//        if (cursor.moveToFirst()) {
-//            filePath = cursor.getString(columnIndex);
-//        }
-//        cursor.close();
-//        return filePath;
-//    }
-//
-//    /**
-//     * 适配api11-api18,根据uri获取图片的绝对路径
-//     *
-//     * @param context
-//     *            上下文对象
-//     * @param uri
-//     *            图片的Uri
-//     * @return 如果Uri对应的图片存在,那么返回该图片的绝对路径,否则返回null
-//     */
-//    private static String getRealPathFromUri_Api11To18(Context context, Uri uri) {
-//        String filePath = null;
-//        String[] projection = { MediaStore.Images.Media.DATA };
-//
-//        CursorLoader loader = new CursorLoader(context, uri, projection, null,
-//                null, null);
-//        Cursor cursor = loader.loadInBackground();
-//
-//        if (cursor != null) {
-//            cursor.moveToFirst();
-//            filePath = cursor.getString(cursor.getColumnIndex(projection[0]));
-//            cursor.close();
-//        }
-//
-//        return filePath;
-//
-//    }
-//
-//    /**
-//     * 适配api11以下(不包括api11),根据uri获取图片的绝对路径
-//     *
-//     * @param context
-//     *            上下文对象
-//     * @param uri
-//     *            图片的Uri
-//     * @return 如果Uri对应的图片存在,那么返回该图片的绝对路径,否则返回null
-//     */
-//    private static String getRealPathFromUri_BelowApi11(Context context, Uri uri) {
-//        String filePath = null;
-//        String[] projection = { MediaStore.Images.Media.DATA };
-//        Cursor cursor = context.getContentResolver().query(uri, projection,
-//                null, null, null);
-//        if (cursor != null) {
-//            cursor.moveToFirst();
-//            filePath = cursor.getString(cursor.getColumnIndex(projection[0]));
-//            cursor.close();
-//        }
-//        return filePath;
-//    }
-
     /**
      * 适配api19以上,根据uri获取图片的绝对路径
      *
@@ -249,58 +114,95 @@ public class ImageUtils {
      */
     public static String getRealPathFromUri(Context context, Uri uri) {
         int sdkVersion = Build.VERSION.SDK_INT;
-        if (sdkVersion < 19) { // < 19
+        if (sdkVersion >= 19) { // api >= 19
+            return getRealPathFromUriAboveApi19(context, uri);
+        } else { // api < 19
             return getRealPathFromUriBelowAPI19(context, uri);
-        } else { // >= 19
-            return getRealPathFromUriAboveAPI19(context, uri);
         }
     }
 
-    // < 19
+    /**
+     * 适配api19以下(不包括api19),根据uri获取图片的绝对路径
+     *
+     * @param context 上下文对象
+     * @param uri     图片的Uri
+     * @return 如果Uri对应的图片存在, 那么返回该图片的绝对路径, 否则返回null
+     */
     private static String getRealPathFromUriBelowAPI19(Context context, Uri uri) {
         return getDataColumn(context, uri, null, null);
     }
 
-    // >= 19
-    @TargetApi(19)
-    private static String getRealPathFromUriAboveAPI19(Context context, Uri uri) {
-        String imagePath = null;
+    /**
+     * 适配api19及以上,根据uri获取图片的绝对路径
+     *
+     * @param context 上下文对象
+     * @param uri     图片的Uri
+     * @return 如果Uri对应的图片存在, 那么返回该图片的绝对路径, 否则返回null
+     */
+    @SuppressLint("NewApi")
+    private static String getRealPathFromUriAboveApi19(Context context, Uri uri) {
+        String filePath = null;
         if (DocumentsContract.isDocumentUri(context, uri)) {
-            // document 类型的 Ui, 需要通过 document id 处理
-            String docId = DocumentsContract.getDocumentId(uri);
-            if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
-                String id = docId.split(":")[1]; // 解析出 id
+            // 如果是document类型的 uri, 则通过document id来进行处理
+            String documentId = DocumentsContract.getDocumentId(uri);
+            if (isMediaDocument(uri)) { // MediaProvider
+                // 使用':'分割
+                String id = documentId.split(":")[1];
+
                 String selection = MediaStore.Images.Media._ID + "=?";
-                String[] selectionArgs = new String[]{id};
-                imagePath = getDataColumn(context, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection, selectionArgs);
-            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
-                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
-                imagePath = getDataColumn(context, contentUri, null, null);
+                String[] selectionArgs = {id};
+                filePath = getDataColumn(context, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection, selectionArgs);
+            } else if (isDownloadsDocument(uri)) { // DownloadsProvider
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(documentId));
+                filePath = getDataColumn(context, contentUri, null, null);
             }
-        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            // content 类型的 Uri，使用普通方式处理
-            imagePath = getDataColumn(context, uri, null, null);
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            // file 类型的 Uri，直接获取图片路径
-            imagePath = uri.getPath();
+        } else if ("content".equalsIgnoreCase(uri.getScheme())){
+            // 如果是 content 类型的 Uri
+            filePath = getDataColumn(context, uri, null, null);
+        } else if ("file".equals(uri.getScheme())) {
+            // 如果是 file 类型的 Uri,直接获取图片对应的路径
+            filePath = uri.getPath();
         }
-        return imagePath;
+        return filePath;
     }
 
     /**
-     * 获取 _data 列对应的内容, 其实就是 path
+     * 获取数据库表中的 _data 列，即返回Uri对应的文件路径
      * @return
      */
     private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
-        String dataColumn = MediaStore.Images.Media.DATA;
-        String[] projection = new String[]{dataColumn};
-        Cursor cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
         String path = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            path = cursor.getString(cursor.getColumnIndex(dataColumn));
-            cursor.close();
+
+        String[] projection = new String[]{MediaStore.Images.Media.DATA};
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                int columnIndex = cursor.getColumnIndexOrThrow(projection[0]);
+                path = cursor.getString(columnIndex);
+            }
+        } catch (Exception e) {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return path;
+    }
+
+    /**
+     * @param uri the Uri to check
+     * @return Whether the Uri authority is MediaProvider
+     */
+    private static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri the Uri to check
+     * @return Whether the Uri authority is DownloadsProvider
+     */
+    private static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
     }
 
 }
