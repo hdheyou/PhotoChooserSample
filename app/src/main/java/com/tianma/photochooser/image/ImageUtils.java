@@ -106,7 +106,7 @@ public class ImageUtils {
     }
 
     /**
-     * 适配api19以上,根据uri获取图片的绝对路径
+     * 根据Uri获取图片的绝对路径
      *
      * @param context 上下文对象
      * @param uri     图片的Uri
